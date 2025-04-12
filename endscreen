@@ -1,0 +1,75 @@
+import pygame
+import sys
+
+
+pygame.init()
+pygame.font.init()
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+final_score = 0
+
+
+def end_screen(screen, width, height, final_score):
+    font = pygame.font.SysFont(None, 48)
+    font2 = pygame.font.SysFont(None, 36)
+    button_font = pygame.font.SysFont(None, 36)
+
+    # shared button props
+    button_width = 200
+    button_height = 50
+    button_y = height - button_height - 200
+
+    # retry button
+    button_text = button_font.render("Retry Game", True, (255, 255, 255))
+    button_x = (width // 2) - button_width - 10
+
+    # exit button
+    button2_text = button_font.render("Exit Game", True, (255, 255, 255))
+    button2_x = (width // 2) + 10
+    button2_y = button_y
+
+    while True:
+        screen.fill((0, 0, 0))
+
+        # title
+        title_text = font.render("Game Over!", True, (255, 255, 255))
+        title_rect = title_text.get_rect(center=(width // 2, height // 4))
+        screen.blit(title_text, title_rect)
+
+        # final score
+        score_text = font2.render(f"Score: {final_score}", True, (255, 255, 255))
+        score_rect = score_text.get_rect(center=(width // 2, title_rect.bottom + 30))
+        screen.blit(score_text, score_rect)
+
+        # retry button
+        pygame.draw.rect(screen, (250, 0, 0), (button_x, button_y, button_width, button_height))
+        button_text_rect = button_text.get_rect(center=(button_x + button_width // 2, button_y + button_height // 2))
+        screen.blit(button_text, button_text_rect)
+
+        # exit button
+        pygame.draw.rect(screen, (250, 0, 0), (button2_x, button2_y, button_width, button_height))
+        button2_text_rect = button2_text.get_rect(
+            center=(button2_x + button_width // 2, button2_y + button_height // 2))
+        screen.blit(button2_text, button2_text_rect)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = event.pos
+                # retry button clicked
+                if button_x <= mouse_x <= button_x + button_width and button_y <= mouse_y <= button_y + button_height:
+                    print("Retrying game!")
+                    # retry logic
+
+                # exit button clicked
+                if button2_x <= mouse_x <= button2_x + button_width and button2_y <= mouse_y <= button2_y + button_height:
+                    print("Closing game.")
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.flip()
+
+
+end_screen(screen, width, height, final_score)
