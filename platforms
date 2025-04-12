@@ -1,0 +1,94 @@
+import pygame, sys
+
+pygame.init()
+
+clock = pygame.time.Clock()
+
+display_surface = pygame.display.set_mode((1000, 700))
+display_surface.fill((255, 255, 255))
+
+
+def menu():
+    onMenu = True
+    background = pygame.Rect(0, 0, 1000, 700)
+    logo = pygame.Rect(0, 0, 500, 350)
+    logo.center = 500, 350
+    pygame.draw.rect(display_surface, (0, 0, 193), background)
+    pygame.draw.rect(display_surface, (0, 0, 0), logo)
+    pygame.display.flip()
+    while (onMenu):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                onMenu = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_a:
+                    onMenu = False
+                elif event.key == pygame.K_ESCAPE:
+                    sys.exit()
+    display_surface.fill((0, 0, 193))
+    pygame.display.flip()
+
+
+floatPlat1 = pygame.Rect(0, 0, 550, 20)
+floatPlat1.center = 500, 250
+
+floatPlat2 = pygame.Rect(0, 0, 300, 20)
+floatPlat2.bottomleft = 0, 140
+
+floatPlat3 = pygame.Rect(0, 0, 400, 20)
+floatPlat3.bottomright = 1000, 100
+
+floatPlat4 = pygame.Rect(0, 0, 300, 20)
+floatPlat4.bottomleft = 50, 360
+
+floatStair1 = pygame.Rect(0, 0, 260, 20)
+floatStair1.center = 770, 550
+
+floatStair2 = pygame.Rect(0, 0, 260, 20)
+floatStair2.center = 230, 550
+
+floatStair3 = pygame.Rect(0, 0, 175, 20)
+floatStair3.bottomright = 450, 460
+
+floatStair4 = pygame.Rect(0, 0, 175, 20)
+floatStair4.bottomleft = 550, 460
+
+floatStair5 = pygame.Rect(0, 0, 300, 20)
+floatStair5.bottomleft = 40, 360
+
+floorPlat = pygame.Rect(0, 0, 600, 100)
+floorPlat.center = 500, 685
+
+platforms = [floatPlat1, floatPlat2, floatPlat3, floatStair1, floatStair2, floatStair3, floatStair5, floatStair4, floatStair5,
+             floorPlat]
+
+Hero = pygame.Rect(0, 0, 50, 70)
+Hero.center = 500, 600
+
+
+menu()
+running = True
+while (running):
+    display_surface.fill((0, 0, 193))
+    keys = pygame.key.get_pressed()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+
+    pygame.draw.rect(display_surface, (255, 255, 255), floatPlat1)
+    pygame.draw.rect(display_surface, (255, 255, 255), floatPlat2)
+    pygame.draw.rect(display_surface, (255, 255, 255), floatPlat3)
+    pygame.draw.rect(display_surface, (255, 255, 255), floatPlat4)
+    pygame.draw.rect(display_surface, (255, 255, 255), floatStair1)
+    pygame.draw.rect(display_surface, (255, 255, 255), floatStair2)
+    pygame.draw.rect(display_surface, (255, 255, 255), floatStair3)
+    pygame.draw.rect(display_surface, (255, 255, 255), floatStair4)
+    pygame.draw.rect(display_surface, (100, 0, 0), floorPlat)
+    pygame.draw.rect(display_surface, (255, 0, 0), Hero)
+
+    pygame.display.flip()
+
+    clock.tick(60)
