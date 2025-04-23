@@ -5,11 +5,18 @@ pygame.mixer.init()
 
 width = 1200
 height = 900
+white_col = (255,255,255)
+red_col = (250,0,0)
 display_surface = pygame.display.set_mode((width, height))
 Clock = pygame.time.Clock()
 
 spawnEnemy = pygame.USEREVENT + 1
 pygame.time.set_timer(spawnEnemy, 4000)
+
+def draw_centered_text(surf, text, font, color, center):
+    txt_surf = font.render(text, True, color)
+    txt_rect = txt_surf.get_rect(center=center)
+    surf.blit(txt_surf, txt_rect)
 
 def end_display_surface(display_surface, width, height, final_score):
     font = pygame.font.SysFont(None, 48)
@@ -17,15 +24,12 @@ def end_display_surface(display_surface, width, height, final_score):
     win_font = pygame.font.SysFont(None, 75)
     button_font = pygame.font.SysFont(None, 36)
 
-
     button_width = 200
     button_height = 50
+
+    button_x = (width // 2) - button_width - 10
     button_y = height - button_height - 200
 
-    button_text = button_font.render("Retry Game", True, (255, 255, 255))
-    button_x = (width // 2) - button_width - 10
-
-    button2_text = button_font.render("Exit Game", True, (255, 255, 255))
     button2_x = (width // 2) + 10
     button2_y = button_y
 
@@ -37,25 +41,22 @@ def end_display_surface(display_surface, width, height, final_score):
 
         #Win condition text
         if final_score == 500:
-            win_surf = win_font.render("You Win!", True, (255,255,255))
-            display_surface.blit(win_surf, (500, 50))
+            win_screen = win_font.render("You Win!", True, (255,255,255))
+            display_surface.blit(win_screen, (500, 50))
 
-        title_text = font.render("Game Over!", True, (255, 255, 255))
-        title_rect = title_text.get_rect(center=(width // 2, height // 4))
-        display_surface.blit(title_text, title_rect)
 
-        score_text = font2.render(f"Score: {final_score}", True, (255, 255, 255))
-        score_rect = score_text.get_rect(center=(width // 2, title_rect.bottom + 30))
-        display_surface.blit(score_text, score_rect)
+        draw_centered_text(display_surface,"Game Over!",font,white_col,(width // 2, height // 4))
+        draw_centered_text(display_surface,f'Score: {final_score}',font2,white_col,(width // 2, height // 4 + 50))
 
-        pygame.draw.rect(display_surface, (250, 0, 0), (button_x, button_y, button_width, button_height))
-        button_text_rect = button_text.get_rect(center=(button_x + button_width // 2, button_y + button_height // 2))
-        display_surface.blit(button_text, button_text_rect)
 
-        pygame.draw.rect(display_surface, (250, 0, 0), (button2_x, button2_y, button_width, button_height))
-        button2_text_rect = button2_text.get_rect(
-            center=(button2_x + button_width // 2, button2_y + button_height // 2))
-        display_surface.blit(button2_text, button2_text_rect)
+        retry_rect = pygame.Rect(button_x, button_y, button_width, button_height)
+        exit_rect = pygame.Rect(button2_x, button2_y, button_width, button_height)
+
+        pygame.draw.rect(display_surface, red_col, retry_rect)
+        pygame.draw.rect(display_surface, red_col, exit_rect)
+
+        draw_centered_text(display_surface, "Retry Game", button_font, white_col, retry_rect.center)
+        draw_centered_text(display_surface, "Exit Game", button_font, white_col, exit_rect.center)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -64,6 +65,7 @@ def end_display_surface(display_surface, width, height, final_score):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = event.pos
                 if button_x <= mouse_x <= button_x + button_width and button_y <= mouse_y <= button_y + button_height:
+                    final_score = 0
                     main()
                 if button2_x <= mouse_x <= button2_x + button_width and button2_y <= mouse_y <= button2_y + button_height:
                     print("Closing game.")
